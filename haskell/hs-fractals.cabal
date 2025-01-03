@@ -16,13 +16,13 @@ extra-source-files:  CHANGELOG.md
 cabal-version:       >=1.10
 
 library
-  exposed-modules: Fractal
-  hs-source-dir: src
+  exposed-modules: Fractals.Mandelbrot
+  hs-source-dirs: src
   build-depends:       base >=4.12 && <4.13
 
 executable hs-fractals
   main-is:             Main.hs
-  -- other-modules:
+  other-modules:       Fractals.Mandelbrot
   -- other-extensions:
   build-depends:       base >=4.12 && <4.13
   hs-source-dirs:      src
