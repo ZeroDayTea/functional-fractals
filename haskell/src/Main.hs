@@ -4,10 +4,10 @@ import Fractals.Mandelbrot (generateMandelbrot)
 
 main :: IO ()
 main = do
-  let width = 800
-      height = 600
+  let width = 1920
+      height = 1080
       radius = 2.0
-      maxIter = 512
+      maxIter = 1024
       xRange = (-2.0, 1.0)
       yRange = (-1.5, 1.5)
       outFile = "mandelbrot.ppm"

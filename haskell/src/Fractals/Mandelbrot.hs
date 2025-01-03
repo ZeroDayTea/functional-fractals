@@ -4,6 +4,26 @@ import System.IO (withFile, IOMode(WriteMode), hPutStr)
 
 type Color = (Int, Int, Int)
 
+colorMapping :: [Color]
+colorMapping =
+    [ (66, 30, 15)
+    , (25, 7, 26)
+    , (9, 1, 47)
+    , (4, 4, 73)
+    , (0, 7, 100)
+    , (12, 44, 138)
+    , (24, 82, 177)
+    , (57, 125, 209)
+    , (134, 181, 229)
+    , (211, 236, 248)
+    , (241, 233, 191)
+    , (248, 201, 95)
+    , (255, 170, 0)
+    , (204, 128, 0)
+    , (153, 87, 0)
+    , (106, 52, 3)
+    ]
+
 mandelbrotIters :: Double -> Int -> Double -> Double -> Int
 mandelbrotIters radius maxIter cx cy = go 0 (0, 0)
   where
@@ -17,12 +37,10 @@ mandelbrotIters radius maxIter cx cy = go 0 (0, 0)
         in go (iter+1) (x', y')
 
 iterationToColor :: Int -> Int -> Color
-iterationToColor maxIter iter =
-  if iter == maxIter
-     then (0, 0, 0)
-     else
-       let c = round (255 * fromIntegral iter / fromIntegral maxIter)
-       in (c, 0, 255 - c)
+iterationToColor maxIter iter
+  | iter == maxIter = (0, 0, 0)
+  | iter > 0 = colorMapping !! (iter `mod` 16)
+  | otherwise = (0, 0, 0)
 
 generateMandelbrot :: Int -> Int -> Int -> Double -> (Double, Double) -> (Double, Double) -> FilePath -> IO()
 generateMandelbrot width height maxIter radius (xMin, xMax) (yMin, yMax) outFile = do
