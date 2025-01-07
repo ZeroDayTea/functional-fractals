@@ -10,7 +10,7 @@ main = do
       maxIter = 1024
       xRange = (-2.0, 1.0)
       yRange = (-1.5, 1.5)
-      outFile = "mandelbrot.ppm"
+      outFile = "mandelbrot.png"
 
   putStrLn $ "Generating Mandelbrot image: " ++ outFile
   generateMandelbrot width height maxIter radius xRange yRange outFile

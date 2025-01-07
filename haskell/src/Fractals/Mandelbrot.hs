@@ -1,8 +1,10 @@
 module Fractals.Mandelbrot (generateMandelbrot) where
 
 import System.IO (withFile, IOMode(WriteMode), hPutStr)
+import Codec.Picture
+import Data.Word (Word8)
 
-type Color = (Int, Int, Int)
+type Color = (Word8, Word8, Word8)
 
 colorMapping :: [Color]
 colorMapping =
@@ -47,21 +49,13 @@ generateMandelbrot width height maxIter radius (xMin, xMax) (yMin, yMax) outFile
   let dx = (xMax - xMin) / fromIntegral width
       dy = (yMax - yMin) / fromIntegral height
 
-  withFile outFile WriteMode $ \handle -> do
-    hPutStr handle $ "P3\n" ++ show width ++ " " ++ show height ++ "\n255\n"
-    mapM_ (writeRow handle dx dy) [0 .. height-1]
+      pixelGen x y =
+        let cx = xMin + fromIntegral x * dx
+            cy = yMin + fromIntegral y * dy
+            iter = mandelbrotIters radius maxIter cx cy
+            (r, g, b) = iterationToColor maxIter iter
+        in PixelRGB8 r g b
 
-  where
-    writeRow handle dx dy row = do
-      let y0 = yMin + fromIntegral row * dy
-      let rowPixels = [ pixelColor col y0 dx | col <- [0 .. width-1] ]
-      mapM_ (writePixel handle) rowPixels
+      image = generateImage pixelGen width height
 
-    pixelColor col y0 dx =
-      let x0 = xMin + fromIntegral col * dx
-          iterCount = mandelbrotIters radius maxIter x0 y0
-          (r, g, b) = iterationToColor maxIter iterCount
-      in (r, g, b)
-
-    writePixel handle (r, g, b) =
-      hPutStr handle (show r ++ " " ++ show g ++ " " ++ show b ++ "\t")
+  writePng outFile image
