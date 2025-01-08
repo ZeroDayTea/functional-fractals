@@ -2,3 +2,5 @@ dist/
 dist-newstyle/
 mandelbrot.ppm
 mandelbrot.png
+cabal.project.local*
+hs-fractals
